@@ -1,5 +1,5 @@
 from init import db, ma
-class address(db.Model):
+class Address(db.Model):
     __tablename__="addresses"
     id = db.Column(db.Integer, primary_key=True)
     street_number = db.Column (db.Interger, nullable=False)
