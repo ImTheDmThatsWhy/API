@@ -4,6 +4,7 @@ class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     street_number = db.Column (db.Interger, nullable=False)
     street = db.Column(db.String(200), nullable=False)
+    suburb =  db.Column(db.String(200), nullable=False)
     postcode = db.Column(db.interger, nullable=False)
     state = db.Column(db.String(200), nullable=False)
 
