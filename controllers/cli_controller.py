@@ -51,10 +51,10 @@ def seed_tables():
             state = "Vic" 
         ),
         Address(
-                street_number = "7",
-                street = "Crackle Street",
-                suburb = "Bundoora",
-                postcode = "3083",    
+                street_number = "9",
+                street = "Clinker Street",
+                suburb = "Boronia",
+                postcode = "3155",    
                 state = "vic" 
             )
 
