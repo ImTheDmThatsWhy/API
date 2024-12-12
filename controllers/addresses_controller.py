@@ -1,8 +1,7 @@
-from flask import Blueprint, request
+from flask import Blueprint
 from init import db 
-from models.address import Address, address_schema, addresses_schema
-addresses_bp = Blueprint ("addresses", __name__, url_prefix="/addresses")  
-
+from models.address import Address, addresses_schema
+addresses_bp= Blueprint("addresses",__name__,url_prefix="/addresses")
 @addresses_bp.route("/")
 def get_addresses():
     stmt = db.select(Address)

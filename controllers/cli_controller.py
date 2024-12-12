@@ -61,3 +61,5 @@ def seed_tables():
 
     ]
     db.session.add_all(addresses)
+    db.session.commit()
+    print("tables seeded")
