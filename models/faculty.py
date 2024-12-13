@@ -5,7 +5,7 @@ class Faculty(db.Model):
     __tablename__ = "faculties"
 
     id = db.Column(db.Integer, primary_key=True)
-    faculty_name = db.Column(db.String(100), nullable=False)
+    faculty_name = db.Column(db.String(300), nullable=False)
 
 
 class FacultySchema(ma.Schema):

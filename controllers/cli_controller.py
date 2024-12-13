@@ -63,19 +63,19 @@ def seed_tables():
 
     faculties = [
         Faculty(
-            name = "Department of Environment and Genetics"
+            faculty_name = "Department of Environment and Genetics"
         ),
         Faculty(
-            name = "Department of Nursing and Midwifery"
+            faculty_name = "Department of Nursing and Midwifery"
         ),
         Faculty(
-            name = "Department of Law"
+            faculty_name = "Department of Law"
         ),
         Faculty(
-            name = "Department of Humanities and Social Sciences"
+            faculty_name = "Department of Humanities and Social Sciences"
         ),
         Faculty(
-            name = "Department of Computing, Engineering, and Mathematical Sciences"
+            faculty_name = "Department of Computing, Engineering, and Mathematical Sciences"
         )
     ]
     db.session.add_all(faculties)
