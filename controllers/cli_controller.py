@@ -2,6 +2,7 @@ from flask import Blueprint
 
 from init import db
 from models.address import Address
+from models.faculty import Faculty
 
 db_commands = Blueprint("db", __name__)
 
@@ -58,5 +59,25 @@ def seed_tables():
         ),
     ]
     db.session.add_all(addresses)
+    db.session.commit()
+
+    faculties = [
+        Faculty(
+            name = "Department of Environment and Genetics"
+        ),
+        Faculty(
+            name = "Department of Nursing and Midwifery"
+        ),
+        Faculty(
+            name = "Department of Law"
+        ),
+        Faculty(
+            name = "Department of Humanities and Social Sciences"
+        ),
+        Faculty(
+            name = "Department of Computing, Engineering, and Mathematical Sciences"
+        )
+    ]
+    db.session.add_all(faculties)
     db.session.commit()
     print("tables seeded")
