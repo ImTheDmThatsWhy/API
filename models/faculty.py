@@ -13,5 +13,5 @@ class FacultySchema(ma.Schema):
         fields = ("id", "faculty_name")
 
 
-faculty_schema = FacultySchema
+faculty_schema = FacultySchema()
 faculties_schema = FacultySchema(many=True)

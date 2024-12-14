@@ -3,7 +3,8 @@ from flask import Flask
 from init import db, ma
 from controllers.cli_controller import db_commands
 from controllers.addresses_controller import addresses_bp
-from controllers.faculties_controller import faculties_bp 
+from controllers.faculties_controller import faculties_bp
+
 
 def create_app():
     app = Flask(__name__)
