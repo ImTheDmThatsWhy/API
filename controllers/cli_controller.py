@@ -3,6 +3,7 @@ from flask import Blueprint
 from init import db
 from models.address import Address
 from models.faculty import Faculty
+from models.student import Student
 
 db_commands = Blueprint("db", __name__)
 
@@ -71,5 +72,40 @@ def seed_tables():
         ),
     ]
     db.session.add_all(faculties)
+    db.session.commit()
+
+    students = [
+        Student(
+            name = "Jane Doe",
+            phone = "0100000000",
+            email = "janedoe@email.com",
+            address_id = addresses[0].id
+        ),
+         Student(
+            name = "Bob Cob",
+            phone = "0100000001",
+            email = "bobcob@op.com",
+            address_id = addresses[1].id
+        ),
+         Student(
+            name = "John Doe",
+            phone = "0100000002",
+            email = "johndoe@email.com",
+            address_id = addresses[0].id
+        ),
+         Student(
+            name = "Cain Smith",
+            phone = "0100000003",
+            email = "cainsmith@box.com",
+            address_id = addresses[2].id
+        ),
+         Student(
+            name = "Maisy Mouse",
+            phone = "0100000004",
+            email = "maisymouse@maze.com",
+            address_id = addresses[3].id
+        )
+    ]
+    db.session.add_all(students)
     db.session.commit()
     print("tables seeded")
