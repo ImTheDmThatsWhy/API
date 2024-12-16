@@ -1,3 +1,4 @@
+from marshmallow import fields
 from init import db, ma
 
 
@@ -11,6 +12,8 @@ class Professor(db.Model):
 
 
 class ProfessorSchema(ma.Schema):
+    ordered=True
+    faculty=fields.Nested("FacultySchema", only=["faculty_id"])
     class Meta:
         fields = ["id", "name", "department", "address"]
 

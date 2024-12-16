@@ -4,6 +4,7 @@ from init import db
 from models.address import Address
 from models.faculty import Faculty
 from models.student import Student
+from models.professor import Professor
 
 db_commands = Blueprint("db", __name__)
 
@@ -104,8 +105,56 @@ def seed_tables():
             phone = "0100000004",
             email = "maisymouse@maze.com",
             address_id = addresses[3].id
+        ),
+          Student(
+            name = "Stacy Lark",
+            phone = "0100000005",
+            email = "stacylark@pol.com",
+            address_id = addresses[4].id
         )
     ]
     db.session.add_all(students)
     db.session.commit()
+    
+    professors = [
+        Professor(
+            name = "Gareth Plain",
+            phone = "0300000000",
+            email = "garethplain@university.com",
+            faculty_id = faculties[0].id
+        ),
+         Professor(
+            name = "Hayley Blue",
+            phone = "0300000001",
+            email = "hayleyblue@university.com",
+            faculty_id = addresses[1].id
+        ),
+         Professor(
+            name = "Sonia Marie",
+            phone = "0300000002",
+            email = "soniamarie@university.com",
+            faculty_id = faculties[1].id
+        ),
+         Professor(
+            name = "Luke Sky",
+            phone = "0300000003",
+            email = "lukesky@university.com",
+            faculty_id = faculties[2].id
+        ),
+         Professor(
+            name = "Sebastien Park",
+            phone = "0300000004",
+            email = "sebastienpark@university.com",
+            faculty_id = faculties [3].id
+        ),
+         Professor(
+            name = "Bonnie Tree",
+            phone = "0300000005",
+            email = "bonnietree@university.com",
+            faculty_id = faculties [4].id
+         )
+    ]
+    db.session.add_all(professors)
+    db.session.commit()
+    
     print("tables seeded")
