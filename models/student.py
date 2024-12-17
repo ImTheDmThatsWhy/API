@@ -13,8 +13,9 @@ class Student(db.Model):
 
 
 class StudentSchema(ma.Schema):
-    ordered=True
-    address = fields.Nested ("AddressSchema", only=["addresses_id"])
+    ordered = True
+    address = fields.Nested("AddressSchema", only=["addresses_id"])
+
     class Meta:
         fields = ("id", "name", "email", "phone", "address_id")
 

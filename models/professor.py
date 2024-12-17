@@ -13,8 +13,9 @@ class Professor(db.Model):
 
 
 class ProfessorSchema(ma.Schema):
-    ordered=True
-    faculty=fields.Nested("FacultySchema", only=["faculty_id"])
+    ordered = True
+    faculty = fields.Nested("FacultySchema", only=["faculty_id"])
+
     class Meta:
         fields = ["id", "name", "phone", "email", "faculty_id"]
 

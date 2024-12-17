@@ -8,7 +8,9 @@ class Thesis(db.Model):
     name = db.Column(db.String(200), nullable=False)
     grade = db.Column(db.String(100), nullable=False, unique=True)
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
-    professor_id = db.Column(db.Integer, db.ForeignKey("degree_levels.id"), nullable=False)
+    professor_id = db.Column(
+        db.Integer, db.ForeignKey("degree_levels.id"), nullable=False
+    )
 
 
 class ThesisSchema(ma.Schema):

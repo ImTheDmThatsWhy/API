@@ -49,10 +49,11 @@ def update_faculty(faculty_id):
     except IntegrityError:
         return {"message": "faculty already in system"}, 409
 
+
 @faculties_bp.route("/<int:faculty_id>", methods=["Delete"])
 def delete_faculty(faculty_id):
     stmt = db.select(Faculty).filter_by(id=faculty_id)
-    faculty= db.session.scalar(stmt)
+    faculty = db.session.scalar(stmt)
     if faculty:
         db.session.delete(faculty)
         db.session.commit()

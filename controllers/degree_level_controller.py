@@ -41,18 +41,23 @@ def update_degree_level(degree_level_id):
         degree_level = db.session.scalar(stmt)
         body_data = request.get_json()
         if degree_level:
-            degree_level.degree_level_name = body_data.get("degree_level_name") or degree_level.degree_level_name
+            degree_level.degree_level_name = (
+                body_data.get("degree_level_name") or degree_level.degree_level_name
+            )
             db.session.commit()
             return degree_schema.dump(degree_level)
         else:
-            return {"message": f"degree level with id{degree_level_id} does not exist"}, 404
+            return {
+                "message": f"degree level with id{degree_level_id} does not exist"
+            }, 404
     except IntegrityError:
         return {"message": "degree level already in system"}, 409
+
 
 @degree_levels_bp.route("/<int:degree_level_id>", methods=["Delete"])
 def delete_degree_level(degree_level_id):
     stmt = db.select(Degree_level).filter_by(id=degree_level_id)
-    degree_level= db.session.scalar(stmt)
+    degree_level = db.session.scalar(stmt)
     if degree_level:
         db.session.delete(degree_level)
         db.session.commit()

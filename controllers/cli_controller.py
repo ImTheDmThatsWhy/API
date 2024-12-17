@@ -79,133 +79,127 @@ def seed_tables():
 
     students = [
         Student(
-            name = "Jane Doe",
-            phone = "0100000000",
-            email = "janedoe@email.com",
-            address_id = addresses[0].id
+            name="Jane Doe",
+            phone="0100000000",
+            email="janedoe@email.com",
+            address_id=addresses[0].id,
         ),
-         Student(
-            name = "Bob Cob",
-            phone = "0100000001",
-            email = "bobcob@op.com",
-            address_id = addresses[1].id
+        Student(
+            name="Bob Cob",
+            phone="0100000001",
+            email="bobcob@op.com",
+            address_id=addresses[1].id,
         ),
-         Student(
-            name = "John Doe",
-            phone = "0100000002",
-            email = "johndoe@email.com",
-            address_id = addresses[0].id
+        Student(
+            name="John Doe",
+            phone="0100000002",
+            email="johndoe@email.com",
+            address_id=addresses[0].id,
         ),
-         Student(
-            name = "Cain Smith",
-            phone = "0100000003",
-            email = "cainsmith@box.com",
-            address_id = addresses[2].id
+        Student(
+            name="Cain Smith",
+            phone="0100000003",
+            email="cainsmith@box.com",
+            address_id=addresses[2].id,
         ),
-         Student(
-            name = "Maisy Mouse",
-            phone = "0100000004",
-            email = "maisymouse@maze.com",
-            address_id = addresses[3].id
+        Student(
+            name="Maisy Mouse",
+            phone="0100000004",
+            email="maisymouse@maze.com",
+            address_id=addresses[3].id,
         ),
-          Student(
-            name = "Stacy Lark",
-            phone = "0100000005",
-            email = "stacylark@pol.com",
-            address_id = addresses[4].id
-        )
+        Student(
+            name="Stacy Lark",
+            phone="0100000005",
+            email="stacylark@pol.com",
+            address_id=addresses[4].id,
+        ),
     ]
     db.session.add_all(students)
     db.session.commit()
-    
+
     professors = [
         Professor(
-            name = "Gareth Plain",
-            phone = "0300000000",
-            email = "garethplain@university.com",
-            faculty_id = faculties[0].id
+            name="Gareth Plain",
+            phone="0300000000",
+            email="garethplain@university.com",
+            faculty_id=faculties[0].id,
         ),
-         Professor(
-            name = "Hayley Blue",
-            phone = "0300000001",
-            email = "hayleyblue@university.com",
-            faculty_id = faculties[1].id
+        Professor(
+            name="Hayley Blue",
+            phone="0300000001",
+            email="hayleyblue@university.com",
+            faculty_id=faculties[1].id,
         ),
-         Professor(
-            name = "Sonia Marie",
-            phone = "0300000002",
-            email = "soniamarie@university.com",
-            faculty_id = faculties[1].id
+        Professor(
+            name="Sonia Marie",
+            phone="0300000002",
+            email="soniamarie@university.com",
+            faculty_id=faculties[1].id,
         ),
-         Professor(
-            name = "Luke Sky",
-            phone = "0300000003",
-            email = "lukesky@university.com",
-            faculty_id = faculties[2].id
+        Professor(
+            name="Luke Sky",
+            phone="0300000003",
+            email="lukesky@university.com",
+            faculty_id=faculties[2].id,
         ),
-         Professor(
-            name = "Sebastien Park",
-            phone = "0300000004",
-            email = "sebastienpark@university.com",
-            faculty_id = faculties [3].id
+        Professor(
+            name="Sebastien Park",
+            phone="0300000004",
+            email="sebastienpark@university.com",
+            faculty_id=faculties[3].id,
         ),
-         Professor(
-            name = "Bonnie Tree",
-            phone = "0300000005",
-            email = "bonnietree@university.com",
-            faculty_id = faculties [4].id
-         )
+        Professor(
+            name="Bonnie Tree",
+            phone="0300000005",
+            email="bonnietree@university.com",
+            faculty_id=faculties[4].id,
+        ),
     ]
     db.session.add_all(professors)
     db.session.commit()
 
-    degree_levels=[
-        Degree_level(
-            degree_level_name = "Honours"
-        ),
-        Degree_level(
-            degree_level_name = "Masters"
-        ),
-        Degree_level(
-            degree_level_name = "PHD"
-        )
+    degree_levels = [
+        Degree_level(degree_level_name="Honours"),
+        Degree_level(degree_level_name="Masters"),
+        Degree_level(degree_level_name="PHD"),
     ]
 
     db.session.add_all(degree_levels)
     db.session.commit()
 
-    theses=[
+    theses = [
         Thesis(
-            name = "Determining the age of Dingos from faecal samples",
-            grade = "A",
-            student_id = students[0].id,
-            degree_level_id = degree_levels[0].id
+            name="Determining the age of Dingos from faecal samples",
+            grade="A",
+            student_id=students[0].id,
+            degree_level_id=degree_levels[0].id,
         ),
-         Thesis(
-            name = "Modern influence on the practice of law",
-            grade = "B",
-            student_id = students[1].id,
-            degree_level_id = degree_levels[1].id
+        Thesis(
+            name="Modern influence on the practice of law",
+            grade="B",
+            student_id=students[1].id,
+            degree_level_id=degree_levels[1].id,
         ),
-         Thesis(
-            name = "Arts impact on modern society",
-            grade = "B",
-            student_id = students[2].id,
-            degree_level_id = degree_levels[2].id
+        Thesis(
+            name="Arts impact on modern society",
+            grade="B",
+            student_id=students[2].id,
+            degree_level_id=degree_levels[2].id,
         ),
-         Thesis(
-            name = "The Valuable Lessons of Poker",
-            grade = "D",
-            student_id = students[3].id,
-            degree_level_id = degree_levels[1].id
-        ),    
-         Thesis(
-            name = "Gene Therapy for Cancer Treatment",
-            grade = "C",
-            student_id = students[4].id,
-            degree_level_id = degree_levels[0].id
-        )
-    ]   
+        Thesis(
+            name="The Valuable Lessons of Poker",
+            grade="D",
+            student_id=students[3].id,
+            degree_level_id=degree_levels[1].id,
+        ),
+        Thesis(
+            name="Gene Therapy for Cancer Treatment",
+            grade="C",
+            student_id=students[4].id,
+            degree_level_id=degree_levels[0].id,
+        ),
+    ]
     db.session.add_all(theses)
     db.session.commit()
     print("tables seeded")
