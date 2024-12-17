@@ -8,6 +8,7 @@ from controllers.students_controller import students_bp
 from controllers.professors_controller import professors_bp
 from controllers.degree_level_controller import degree_levels_bp
 from controllers.thesis_controller import thesis_bp
+from controllers.student_supervisors_controller import student_supervisors_bp
 
 
 def create_app():
@@ -25,4 +26,5 @@ def create_app():
     app.register_blueprint(professors_bp)
     app.register_blueprint(degree_levels_bp)
     app.register_blueprint(thesis_bp)
+    app.register_blueprint(student_supervisors_bp)
     return app

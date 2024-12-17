@@ -3,7 +3,7 @@ from init import db, ma
 
 
 class Professor(db.Model):
-    __tablename__ = "Professors"
+    __tablename__ = "professors"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)

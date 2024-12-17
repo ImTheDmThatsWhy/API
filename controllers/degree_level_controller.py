@@ -17,9 +17,9 @@ def get_degree_levels():
 @degree_levels_bp.route("/<int:degree_level_id>")
 def get_degree_level(degree_level_id):
     stmt = db.select(Degree_level).filter_by(id=degree_level_id)
-    degree_level = db.session.scalar(stmt)
-    if degree_level:
-        data = degree_schema.dump(degree_level)
+    level = db.session.scalar(stmt)
+    if level:
+        data = degree_schema.dump(level)
         return data
     else:
         return {"message": f"degree_level with id{degree_level_id} not found"}, 404

@@ -11,8 +11,8 @@ class Student_supervisor(db.Model):
 
 class Student_supervisorSchema(ma.Schema):
     class Meta:
-        fields = ("id", "faculty_name")
+        fields = ("student_id", "professor_id")
 
 
-student_supervisor_schema = Student_supervisorSchema
-student_supervisors_schema_schema = Student_supervisorSchema(many=True)
+student_supervisor_schema = Student_supervisorSchema()
+student_supervisors_schema = Student_supervisorSchema(many=True)

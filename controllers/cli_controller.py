@@ -7,6 +7,7 @@ from models.student import Student
 from models.professor import Professor
 from models.degree_level import Degree_level
 from models.thesis import Thesis
+from models.student_supervisors import Student_supervisor
 
 db_commands = Blueprint("db", __name__)
 
@@ -201,5 +202,36 @@ def seed_tables():
         ),
     ]
     db.session.add_all(theses)
+    db.session.commit()
+    
+    # student_supervisor = [Student_supervisor(
+            
+    #         student_id=students[0].id,
+    #         professor_id=professors[0].id
+    #         ),
+    student_supervisor = [
+            Student_supervisor(
+            student_id=students[0].id,
+            professor_id=professors[0].id),
+            Student_supervisor(
+            student_id=students[1].id,
+            professor_id=professors[1].id),
+            Student_supervisor(
+            student_id=students[1].id,
+            professor_id=professors[2].id),
+            Student_supervisor(
+            student_id=students[2].id,
+            professor_id=professors[1].id),
+            Student_supervisor(
+            student_id=students[3].id,
+            professor_id=professors[2].id),
+            Student_supervisor(
+            student_id=students[4].id,
+            professor_id=professors[3].id),
+            Student_supervisor(
+            student_id=students[4].id,
+            professor_id=professors[4].id)    
+    ]
+    db.session.add_all(student_supervisor)
     db.session.commit()
     print("tables seeded")

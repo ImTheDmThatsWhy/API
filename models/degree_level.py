@@ -13,5 +13,5 @@ class DegreeSchema(ma.Schema):
         fields = ("id", "degree_level_name")
 
 
-degree_schema = DegreeSchema
+degree_schema = DegreeSchema()
 degrees_schema = DegreeSchema(many=True)
