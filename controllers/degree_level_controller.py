@@ -16,7 +16,7 @@ def get_degree_levels():
 
 @degree_levels_bp.route("/<int:degree_level_id>")
 def get_degree_level(degree_level_id):
-    stmt = db.select().filter_by(id=degree_level_id)
+    stmt = db.select(Degree_level).filter_by(id=degree_level_id)
     degree_level = db.session.scalar(stmt)
     if degree_level:
         data = degree_schema.dump(degree_level)
@@ -28,10 +28,10 @@ def get_degree_level(degree_level_id):
 @degree_levels_bp.route("/", methods=["POST"])
 def create_degree_level():
     body_data = request.get_json()
-    new_degree_level = Degree_level(new_degree_level=body_data.get("degree_level_name"))
-    db.session.add(new_degree_level)
+    new_level = Degree_level(degree_level_name=body_data.get("degree_level_name"))
+    db.session.add(new_level)
     db.session.commit()
-    return degree_schema.dump(new_degree_level), 201
+    return degree_schema.dump(new_level), 201
 
 
 @degree_levels_bp.route("/<int:degree_level_id>", methods=["PUT", "PATCH"])

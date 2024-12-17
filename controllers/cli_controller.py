@@ -6,6 +6,7 @@ from models.faculty import Faculty
 from models.student import Student
 from models.professor import Professor
 from models.degree_level import Degree_level
+from models.thesis import Thesis
 
 db_commands = Blueprint("db", __name__)
 
@@ -173,4 +174,38 @@ def seed_tables():
     db.session.add_all(degree_levels)
     db.session.commit()
 
+    theses=[
+        Thesis(
+            name = "Determining the age of Dingos from faecal samples",
+            grade = "A",
+            student_id = students[0].id,
+            degree_level_id = degree_levels[0].id
+        ),
+         Thesis(
+            name = "Modern influence on the practice of law",
+            grade = "B",
+            student_id = students[1].id,
+            degree_level_id = degree_levels[1].id
+        ),
+         Thesis(
+            name = "Arts impact on modern society",
+            grade = "B",
+            student_id = students[2].id,
+            degree_level_id = degree_levels[2].id
+        ),
+         Thesis(
+            name = "The Valuable Lessons of Poker",
+            grade = "D",
+            student_id = students[3].id,
+            degree_level_id = degree_levels[1].id
+        ),    
+         Thesis(
+            name = "Gene Therapy for Cancer Treatment",
+            grade = "C",
+            student_id = students[4].id,
+            degree_level_id = degree_levels[0].id
+        )
+    ]   
+    db.session.add_all(theses)
+    db.session.commit()
     print("tables seeded")

@@ -10,7 +10,7 @@ class Degree_level(db.Model):
 
 class DegreeSchema(ma.Schema):
     class Meta:
-        fields = ("id", "faculty_name")
+        fields = ("id", "degree_level_name")
 
 
 degree_schema = DegreeSchema
