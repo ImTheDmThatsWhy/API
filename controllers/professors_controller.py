@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from init import db 
-from models.professor import Professor, professors_schemas, professor_schema, professors_schema
+from models.professor import Professor, professors_schema, professor_schema, professors_schema
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 
@@ -71,6 +71,6 @@ def delete_professor(professor_id):
     if professor: 
         db.session.delete(professor)
         db.session.commit()
-        return{"messgae":f"professor with {professor_id} deleted"}
+        return{"messgae":f"professor with id {professor_id} deleted"}
     else:
         return {"message":f"professor with {professor_id} does not exist"}, 404

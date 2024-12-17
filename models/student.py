@@ -8,7 +8,7 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    phone = db.Column(db.Integer, nullable=True)
+    phone = db.Column(db.VARCHAR(20), nullable=True)
     address_id = db.Column(db.Integer, db.ForeignKey("addresses.id"), nullable=False)
 
 

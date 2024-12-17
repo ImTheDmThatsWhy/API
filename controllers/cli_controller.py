@@ -5,6 +5,7 @@ from models.address import Address
 from models.faculty import Faculty
 from models.student import Student
 from models.professor import Professor
+from models.degree_level import Degree_level
 
 db_commands = Blueprint("db", __name__)
 
@@ -127,7 +128,7 @@ def seed_tables():
             name = "Hayley Blue",
             phone = "0300000001",
             email = "hayleyblue@university.com",
-            faculty_id = addresses[1].id
+            faculty_id = faculties[1].id
         ),
          Professor(
             name = "Sonia Marie",
@@ -156,5 +157,20 @@ def seed_tables():
     ]
     db.session.add_all(professors)
     db.session.commit()
-    
+
+    degree_levels=[
+        Degree_level(
+            degree_level_name = "Honours"
+        ),
+        Degree_level(
+            degree_level_name = "Masters"
+        ),
+        Degree_level(
+            degree_level_name = "PHD"
+        )
+    ]
+
+    db.session.add_all(degree_levels)
+    db.session.commit()
+
     print("tables seeded")

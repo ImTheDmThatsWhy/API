@@ -6,16 +6,17 @@ class Professor(db.Model):
     __tablename__ = "Professors"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    phone = db.Column(db.Integer, nullable=True)
-    faculty_id = db.Column(db.String, db.ForeignKey("faculties.id"), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.VARCHAR(20), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    faculty_id = db.Column(db.Integer, db.ForeignKey("faculties.id"), nullable=False)
 
 
 class ProfessorSchema(ma.Schema):
     ordered=True
     faculty=fields.Nested("FacultySchema", only=["faculty_id"])
     class Meta:
-        fields = ["id", "name", "department", "address"]
+        fields = ["id", "name", "phone", "email", "faculty_id"]
 
 
 professor_schema = ProfessorSchema()
