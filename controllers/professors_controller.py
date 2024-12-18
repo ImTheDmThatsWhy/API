@@ -62,7 +62,7 @@ def update_professor(professor_id):
 
         if professor:
             professor.name = body_data.get("name") or professor.name
-            professor.phone = body_data.get("phone")
+            professor.phone = body_data.get("phone") or professor.phone
             professor.email = body_data.get("email") or professor.email
             professor.faculty_id = body_data.get("faculty_id") or professor.faculty_id
             db.session.commit()

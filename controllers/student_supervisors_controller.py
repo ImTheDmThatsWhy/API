@@ -57,9 +57,20 @@ def update_student_supervisor(student_supervisor_id):
         body_data = request.get_json()
 
         if student_supervisor:
-            student_supervisor.student_id = body_data.get("student_id")
-            student_supervisor.professor_id = body_data.get("professor_id")
+            student_supervisor.student_id = body_data.get("student_id") or student_supervisor.student_id
+            student_supervisor.professor_id = body_data.get("professor_id") or student_supervisor.professor_id
             db.session.commit()
             return student_supervisor_schema.dump(student_supervisor)
         else:
             return {"message": f"Student with id {student_supervisor_id} does not exist"}, 404
+
+@student_supervisors_bp.route("/<int:student_supervisor_id>", methods=["Delete"])
+def delete_student(student_supervisor_id):
+    stmt = db.select(Student_supervisor).filter_by(id=student_supervisor_id)
+    student_supervisor = db.session.scalar(stmt)
+    if student_supervisor:
+        db.session.delete(student_supervisor)
+        db.session.commit()
+        return {"messgae": f"student_supervisor with {student_supervisor_id} deleted"}
+    else:
+        return {"message": f"student_supervisor with {student_supervisor_id} does not exist"}, 404

@@ -57,7 +57,7 @@ def update_student(student_id):
 
         if student:
             student.name = body_data.get("name") or student.name
-            student.phone = body_data.get("phone")
+            student.phone = body_data.get("phone") or student.phone
             student.email = body_data.get("email") or student.email
             student.address_id = body_data.get("address_id") or student.address_id
             db.session.commit()
