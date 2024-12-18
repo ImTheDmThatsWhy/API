@@ -69,6 +69,7 @@ def update_student(student_id):
         return {"message": "Email address already in use"}, 409
 
 
+
 @students_bp.route("/<int:student_id>", methods=["Delete"])
 def delete_student(student_id):
     stmt = db.select(Student).filter_by(id=student_id)
