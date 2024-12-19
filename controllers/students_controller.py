@@ -30,8 +30,13 @@ def get_student(student_id):
 def create_student():
     try:
         body_data = request.get_json()
+        
+        name = str(body_data.get("name"))
+        if len(name.strip()) == 0:
+            return {"message": "Field name cannot be empty"}, 400
+        
         new_student = Student(
-            name=body_data.get("name"),
+            name=name,
             phone=body_data.get("phone"),
             email=body_data.get("email"),
             address_id=body_data.get("address_id"),
@@ -45,7 +50,7 @@ def create_student():
             return {"message": f"Field {err.orig.diag.column_name} required "}, 409
 
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
-            return {"messgae": "email address already in use"}, 409
+            return {"message": f"email address already in use"}, 409
 
 
 @students_bp.route("/<int:student_id>", methods=["PUT", "PATCH"])
@@ -66,17 +71,19 @@ def update_student(student_id):
             return {"message": f"Student with id {student_id} does not exist"}, 404
 
     except IntegrityError:
-        return {"message": "Email address already in use"}, 409
-
+        return {"message": "Email address or phone number is already in use"}, 409
 
 
 @students_bp.route("/<int:student_id>", methods=["Delete"])
 def delete_student(student_id):
-    stmt = db.select(Student).filter_by(id=student_id)
-    student = db.session.scalar(stmt)
-    if student:
-        db.session.delete(student)
-        db.session.commit()
-        return {"messgae": f"student with {student_id} deleted"}
-    else:
-        return {"message": f"student with {student_id} does not exist"}, 404
+    try:
+        stmt = db.select(Student).filter_by(id=student_id)
+        student = db.session.scalar(stmt)
+        if student:
+            db.session.delete(student)
+            db.session.commit()
+            return {"message": f"student with id {student_id} deleted"}
+        else:
+            return {"message": f"student with id {student_id} does not exist"}, 404
+    except IntegrityError:
+        return {"message": f"student with id {student_id} is linked to a professor and cannot be deleted"}, 409

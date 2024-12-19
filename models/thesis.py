@@ -6,16 +6,15 @@ class Thesis(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
-    grade = db.Column(db.String(100), nullable=False)
-    student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
-    degree_level_id = db.Column(
-        db.Integer, db.ForeignKey("degree_levels.id"), nullable=False
+    student_id = db.Column(
+        db.Integer, db.ForeignKey("students.id"), nullable=False, unique=True
     )
+    status_id = db.Column(db.Integer, db.ForeignKey("statuses.id"), nullable=False)
 
 
 class ThesisSchema(ma.Schema):
     class Meta:
-        fields = ("id", "name", "grade", "student_id", "degree_level_id")
+        fields = ("id", "name", "grade", "student_id", "status_id")
 
 
 Thesis_schema = ThesisSchema()

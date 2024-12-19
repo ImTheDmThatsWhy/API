@@ -22,7 +22,7 @@ def get_thesis(thesis_id):
         data = Thesis_schema.dump(thesis)
         return data
     else:
-        return {"message": f"thesis with id {thesis_id}"}
+        return {"message": f"thesis with id {thesis_id} not found"}, 404
 
 
 @thesis_bp.route("/", methods=["POST"])

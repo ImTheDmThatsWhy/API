@@ -4,8 +4,8 @@ from init import db
 from models.address import Address
 from models.faculty import Faculty
 from models.student import Student
-from models.professor import Professor
-from models.degree_level import Degree_level
+from models.supervisor import Supervisor
+from models.status import Status
 from models.thesis import Thesis
 from models.student_supervisors import Student_supervisor
 
@@ -119,104 +119,101 @@ def seed_tables():
     db.session.add_all(students)
     db.session.commit()
 
-    professors = [
-        Professor(
+    supervisors = [
+        Supervisor(
             name="Gareth Plain",
             phone="0300000000",
             email="garethplain@university.com",
             faculty_id=faculties[0].id,
         ),
-        Professor(
+        Supervisor(
             name="Hayley Blue",
             phone="0300000001",
             email="hayleyblue@university.com",
             faculty_id=faculties[1].id,
         ),
-        Professor(
+        Supervisor(
             name="Sonia Marie",
             phone="0300000002",
             email="soniamarie@university.com",
             faculty_id=faculties[1].id,
         ),
-        Professor(
+        Supervisor(
             name="Luke Sky",
             phone="0300000003",
             email="lukesky@university.com",
             faculty_id=faculties[2].id,
         ),
-        Professor(
+        Supervisor(
             name="Sebastien Park",
             phone="0300000004",
             email="sebastienpark@university.com",
             faculty_id=faculties[3].id,
         ),
-        Professor(
+        Supervisor(
             name="Bonnie Tree",
             phone="0300000005",
             email="bonnietree@university.com",
             faculty_id=faculties[4].id,
         ),
     ]
-    db.session.add_all(professors)
+    db.session.add_all(supervisors)
     db.session.commit()
 
-    degree_levels = [
-        Degree_level(degree_level_name="Honours"),
-        Degree_level(degree_level_name="Masters"),
-        Degree_level(degree_level_name="PHD"),
+    statuses = [
+        Status(status_name="Passed"),
+        Status(status_name="Failed"),
+        Status(status_name="Passed with revisions"),
+        Status(status_name="Needs revision"),
+        Status(status_name="Being reviewed"),
     ]
 
-    db.session.add_all(degree_levels)
+    db.session.add_all(statuses)
     db.session.commit()
 
     theses = [
         Thesis(
             name="Determining the age of Dingos from faecal samples",
-            grade="A",
             student_id=students[0].id,
-            degree_level_id=degree_levels[0].id,
+            status_id=statuses[0].id,
         ),
         Thesis(
             name="Modern influence on the practice of law",
-            grade="B",
             student_id=students[1].id,
-            degree_level_id=degree_levels[1].id,
+            status_id=statuses[1].id,
         ),
         Thesis(
             name="Arts impact on modern society",
-            grade="B",
             student_id=students[2].id,
-            degree_level_id=degree_levels[2].id,
+            status_id=statuses[2].id,
         ),
         Thesis(
             name="The Valuable Lessons of Poker",
-            grade="D",
             student_id=students[3].id,
-            degree_level_id=degree_levels[1].id,
+            status_id=statuses[3].id,
         ),
         Thesis(
             name="Gene Therapy for Cancer Treatment",
-            grade="C",
             student_id=students[4].id,
-            degree_level_id=degree_levels[0].id,
+            status_id=statuses[4].id,
+        ),
+        Thesis(
+            name="The effects of natural oxytocin in labour",
+            student_id=students[5].id,
+            status_id=statuses[4].id,
         ),
     ]
     db.session.add_all(theses)
     db.session.commit()
 
-    # student_supervisor = [Student_supervisor(
-
-    #         student_id=students[0].id,
-    #         professor_id=professors[0].id
-    #         ),
     student_supervisor = [
-        Student_supervisor(student_id=students[0].id, professor_id=professors[0].id),
-        Student_supervisor(student_id=students[1].id, professor_id=professors[1].id),
-        Student_supervisor(student_id=students[1].id, professor_id=professors[2].id),
-        Student_supervisor(student_id=students[2].id, professor_id=professors[1].id),
-        Student_supervisor(student_id=students[3].id, professor_id=professors[2].id),
-        Student_supervisor(student_id=students[4].id, professor_id=professors[3].id),
-        Student_supervisor(student_id=students[4].id, professor_id=professors[4].id),
+        Student_supervisor(student_id=students[0].id, supervisor_id=supervisors[0].id),
+        Student_supervisor(student_id=students[1].id, supervisor_id=supervisors[1].id),
+        Student_supervisor(student_id=students[1].id, supervisor_id=supervisors[2].id),
+        Student_supervisor(student_id=students[2].id, supervisor_id=supervisors[1].id),
+        Student_supervisor(student_id=students[3].id, supervisor_id=supervisors[2].id),
+        Student_supervisor(student_id=students[4].id, supervisor_id=supervisors[3].id),
+        Student_supervisor(student_id=students[4].id, supervisor_id=supervisors[4].id),
     ]
     db.session.add_all(student_supervisor)
     db.session.commit()

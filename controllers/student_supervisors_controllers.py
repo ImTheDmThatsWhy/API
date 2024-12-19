@@ -40,7 +40,7 @@ def create_student_supervisor():
         body_data = request.get_json()
         new_student_supervisor = Student_supervisor(
             student_id=body_data.get("student_id"),
-            professor_id=body_data.get("professor_id"),
+            supervisor_id=body_data.get("supervisor_id"),
         )
         db.session.add(new_student_supervisor)
         db.session.commit()
@@ -62,8 +62,8 @@ def update_student_supervisor(student_supervisor_id):
         student_supervisor.student_id = (
             body_data.get("student_id") or student_supervisor.student_id
         )
-        student_supervisor.professor_id = (
-            body_data.get("professor_id") or student_supervisor.professor_id
+        student_supervisor.supervisor_id = (
+            body_data.get("supervisor_id") or student_supervisor.supervisor_id
         )
         db.session.commit()
         return student_supervisor_schema.dump(student_supervisor)

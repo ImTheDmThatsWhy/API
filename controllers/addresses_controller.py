@@ -27,22 +27,30 @@ def get_address(address_id):
 
 @addresses_bp.route("/", methods=["POST"])
 def create_address():
-    body_data = request.get_json()
-    new_address = Address(
-        street_number=body_data.get("street_number"),
-        street=body_data.get("street"),
-        suburb=body_data.get("suburb"),
-        postcode=body_data.get("postcode"),
-        state=body_data.get("state"),
-    )
-    db.session.add(new_address)
-    db.session.commit()
-    return address_schema.dump(new_address), 201
+    try:
+        body_data = request.get_json()
+        stmt = db.select(Address)
+        address= db.session.scalars(stmt)
+        new_address = Address(
+            street_number=body_data.get("street_number"),
+            street=body_data.get("street"),
+            suburb=body_data.get("suburb"),
+            postcode=body_data.get("postcode"),
+            state=body_data.get("state"),
+        )
+        if new_address==address:
+                raise IntegrityError
+        ("This address already exists"),409 
+        db.session.add(new_address)
+        db.session.commit()
+        return address_schema.dump(new_address), 201
+    except IntegrityError as e:
+        print(e)
 
 
 @addresses_bp.route("/<int:address_id>", methods=["PUT", "PATCH"])
 def update_address(address_id):
-    try:
+    # try:
         stmt = db.select(Address).filter_by(id=address_id)
         address = db.session.scalar(stmt)
         body_data = request.get_json()
@@ -58,17 +66,20 @@ def update_address(address_id):
             return address_schema.dump(address)
         else:
             return {"message": f"address with id{address_id} does not exist"}, 404
-    except IntegrityError:
-        return {"message": "address already in system"}, 409
+    # except IntegrityError:
+    #     return {"message": "address already in system"}, 409
 
 
 @addresses_bp.route("/<int:address_id>", methods=["Delete"])
 def delete_address(address_id):
-    stmt = db.select(Address).filter_by(id=address_id)
-    address = db.session.scalar(stmt)
-    if address:
-        db.session.delete(address)
-        db.session.commit()
-        return {"messgage": f"address with id{address_id} deleted"}
-    else:
-        return {"message": f"address with {address_id} does not exist"}, 404
+    try:
+        stmt = db.select(Address).filter_by(id=address_id)
+        address = db.session.scalar(stmt)
+        if address:
+            db.session.delete(address)
+            db.session.commit()
+            return {"messgage": f"address with id{address_id} deleted"}
+        else:
+            return {"message": f"address with {address_id} does not exist"}, 404
+    except IntegrityError:
+        return {"message": f"address with id {address_id} is linked to a student and cannot be deleted"}, 409

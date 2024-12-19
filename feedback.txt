@@ -1,0 +1,67 @@
+12/9/24 Feedback from Simon that for a many to many relationship I need a join table for the professor and student table
+Action taken: A join table was created for professors and students
+
+Feedback for Andrea
+When it was checked: 18/12/24
+Who checked it: Ben Gorman
+
+What was done well
+- Pep8 followed
+- Impeccable crud functionality
+- Env protocols followed
+- Rubric and brief being followed
+
+Actionable Feedback Summary
+1. Change Professor to Supervisor in all instances in your code (or vice versa)
+2. Integrity exceptions required for Create and Update
+3. Remove Nullable = True from student phone
+4. Revise or expand upon potentially unnecessary entities (optional)
+5. Ordering overview (optional)
+6. Email Unique Criteria (optional)
+7. Typos in function names
+
+General Feedback
+1. You have a Professor model that doesn't exist in your ERD. I assume that is supposed to be Supervisor, as you have a student_supervisor junction table. 
+
+Action taken: All tables and join tables has had the word supervisor replaced with professor for consistency
+
+2. All of your Create and Update functions in your controllers need integrity checks. You mentioned to me that you're part way through writing error handling, so just treat this as a reminder. 
+
+Example: You have several Non Nullable criteria without an integrity check
+```
+except IntegrityError as err:
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {"message": f"{err.orig.diag.column_name} is required"}, 409
+``` 
+
+3. 'Nullable = True' isn't necessary. SQL makes fields nullable by default. This line won't impact the code at all, but just means there is more to interpret when building your integrity errors. Seeing you have this present in student phone, but not professor phone, I assume this was unintentional and needs to be removed.
+
+Action takemn: Nullable= True removed
+
+4. It seems like there are entities in this ERD that don't need to be their own entity. 
+- If supervisors can only have one faculty name, why is it not simply in the supervisor entity? 
+- If degree level only connects to the thesis, why is it not simply in the thesis entity?
+
+The way you have it leaves room for a greater design space around these entities, but right now, as standalones I don't understand why they're separate. It might be worth adding a nested schema to these entities so you can gather information from them. 
+
+ie Nesting the degree level would allow the user to search for thesis' via the level of their degree
+
+Action taken: Thesis nested by status so the university can easily see a what stage the thesis is at. Note degree level was also removed as this database now focuses on PHD thesis data only
+
+5. In the student schema, you have ordered = True. By default, Flask sorts everything alphabetically, but this query suggests you specifically want students by order.  I was just wondering if there was a reason to keep the file alphabetical, but that specifically ordered? You can make the full file ordered with 'app.json.sort_keys = False' in your main.py file if you wish.  There isn't any specific feedback here, I was just unsure. 
+
+Action taken: Removed the ordered = True
+
+6. Student email has to be unique, professor email does not. This logic is inconsistent but potentially intentional so I figured I'd mention it. 
+
+Action taken: Changed the professors email so it is unique
+
+7. Typos in function names
+- get thesis function:  def get_theses():
+
+Action taken: None theses is the plural for thesis and this function gets the entire list of theses
+
+- delete student_supervisor: def delete_student(student_supervisor_id):
+
+Action taken: student_supervisor_id changed to student_professor_id for consistency
+
