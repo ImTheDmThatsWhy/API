@@ -7,7 +7,9 @@ class Student_supervisor(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"), nullable=False)
-    supervisor_id = db.Column(db.Integer, db.ForeignKey("supervisors.id"), nullable=False)
+    supervisor_id = db.Column(
+        db.Integer, db.ForeignKey("supervisors.id"), nullable=False
+    )
 
     # student = db.relationship("student", back_populates= "student_supervisors")
     # supervisor = db.relationship("supervisor", back_populates="student_supervisors")

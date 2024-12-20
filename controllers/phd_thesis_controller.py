@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.thesis import Thesis, Thesis_schema, Theses_schema
+from marshmallow import ValidationError
 
 thesis_bp = Blueprint("thesis", __name__, url_prefix="/thesis")
 from sqlalchemy.exc import IntegrityError
@@ -27,16 +28,19 @@ def get_thesis(thesis_id):
 
 @thesis_bp.route("/", methods=["POST"])
 def create_thesis():
-    body_data = request.get_json()
-    new_thesis = Thesis(
-        name=body_data.get("name"),
-        grade=body_data.get("grade"),
-        student_id=body_data.get("student_id"),
-        degree_level_id=body_data.get("degree_level_id"),
-    )
-    db.session.add(new_thesis)
-    db.session.commit()
-    return Thesis_schema.dump(new_thesis), 201
+    try:
+        body_data = Thesis_schema.load(request.get_json())
+        new_thesis = Thesis(
+            name=body_data.get("name"),
+            status_id=body_data.get("status_id"),
+            student_id=body_data.get("student_id"),)
+        db.session.add(new_thesis)
+        db.session.commit()
+        return Thesis_schema.dump(new_thesis), 201
+    except IntegrityError:
+        return {"message": f"student is already in the system or does not exist"}, 409
+    except ValidationError as err:
+        return {"message": "Invalid fields", "errors": err.messages}, 400
 
 
 @thesis_bp.route("/<int:thesis_id>", methods=["PUT", "PATCH"])
@@ -47,17 +51,16 @@ def update_thesis(thesis_id):
         body_data = request.get_json()
         if thesis:
             thesis.name = body_data.get("name") or thesis.name
-            thesis.grade = body_data.get("grade") or thesis.grade
             thesis.student_id = body_data.get("student_id") or thesis.student_id
-            thesis.degree_level_id = (
-                body_data.get("degree_level_id") or thesis.degree_level_id
+            thesis.status_id = (
+                body_data.get("status_id") or thesis.status_id
             )
             db.session.commit()
             return Thesis_schema.dump(thesis)
         else:
             return {"message": f"thesis with id {thesis_id} does not exist"}, 404
     except IntegrityError:
-        return {"message": "thesis already in system"}, 409
+        return {"message": "status_id or student_id does not exist"}, 409
 
 
 @thesis_bp.route("/<int:thesis_id>", methods=["Delete"])
@@ -70,3 +73,4 @@ def delete_thesis(thesis_id):
         return {"messgage": f"thesis with id {thesis_id} deleted"}
     else:
         return {"message": f"thesis with {thesis_id} does not exist"}, 404
+

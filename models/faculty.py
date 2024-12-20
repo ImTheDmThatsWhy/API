@@ -1,4 +1,7 @@
 from init import db, ma
+from marshmallow.validate import Length, And, Regexp
+from marshmallow import fields
+
 
 
 class Faculty(db.Model):
@@ -9,6 +12,11 @@ class Faculty(db.Model):
 
 
 class FacultySchema(ma.Schema):
+    faculty_name = fields.String(required=True, validate=And(
+        Length(min=3, error="faculty_name must be at least 3 characters long"),
+        Regexp('^[A-Za-z][A-Za-z]*$', error="Only letters, and spaces are allowed")
+    ))
+      
     class Meta:
         fields = ("id", "faculty_name")
 

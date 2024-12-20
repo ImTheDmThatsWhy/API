@@ -8,8 +8,10 @@ from models.supervisor import (
 )
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
+from marshmallow import ValidationError
 
 supervisors_bp = Blueprint("supervisors", __name__, url_prefix="/supervisors")
+
 
 @supervisors_bp.route("/")
 def get_supervisors():
@@ -34,16 +36,12 @@ def get_supervisor(supervisor_id):
 def create_supervisor():
     try:
         body_data = request.get_json()
-        email = str(body_data.get("email"))
-        email_format= re.match(r'^[a-zA-Z0-9_]+@[a-zA-Z0-9_]+.[a-zA-Z]$',email)
-        if email!=email_format:
-            return {"message":"invalid email address"}, 400
-        name = str(body_data.get("name"))
-        if len(name.strip()) == 0:
-            return {"message": "Field name cannot be empty"}, 400
+        phone = (body_data.get("phone"))
+        if len(phone.strip()) <8:
+            return {"message": "phone number must have at least 8 numbers"}, 400
         new_supervisor = Supervisor(
             name=body_data.get("name"),
-            phone=body_data.get("phone"),
+            phone=phone,
             email=body_data.get("email"),
             faculty_id=body_data.get("faculty_id"),
         )
@@ -57,6 +55,8 @@ def create_supervisor():
 
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             return {"messgae": "email address or phone number already in use"}, 409
+    except ValidationError as err:
+        return {"message": "Invalid fields", "errors": err.messages}, 400
 
 
 @supervisors_bp.route("/<int:supervisor_id>", methods=["PUT", "PATCH"])
@@ -65,6 +65,9 @@ def update_supervisor(supervisor_id):
         stmt = db.select(Supervisor).filter_by(id=supervisor_id)
         supervisor = db.session.scalar(stmt)
         body_data = request.get_json()
+        phone=body_data.get("phone")
+        if len(phone.strip())<8:
+             return{"message":"phone number must have at least 8 numbers"}
 
         if supervisor:
             supervisor.name = body_data.get("name") or supervisor.name
@@ -74,10 +77,14 @@ def update_supervisor(supervisor_id):
             db.session.commit()
             return supervisor_schema.dump(supervisor)
         else:
-            return {"message": f"supervisor with id {supervisor_id} does not exist"}, 404
+            return {
+                "message": f"supervisor with id {supervisor_id} does not exist"
+            }, 404
 
     except IntegrityError:
-        return {"message": "Email address already in use"}, 409
+        return {"message": "Email address or phone number already in use"}, 409
+    except ValidationError as err:
+        return {"message": "Invalid fields", "errors": err.messages}, 400
 
 
 @supervisors_bp.route("/<int:supervisor_id>", methods=["Delete"])
@@ -92,4 +99,6 @@ def delete_supervisor(supervisor_id):
         else:
             return {"message": f"supervisor with {supervisor_id} does not exist"}, 404
     except IntegrityError:
-        return {"message": f"supervisor with {supervisor_id} is linked to a student and cannot be deleted"}, 409
+        return {
+            "message": f"supervisor with {supervisor_id} is linked to a student and cannot be deleted"
+        }, 409

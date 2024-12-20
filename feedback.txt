@@ -23,7 +23,7 @@ Actionable Feedback Summary
 General Feedback
 1. You have a Professor model that doesn't exist in your ERD. I assume that is supposed to be Supervisor, as you have a student_supervisor junction table. 
 
-Action taken: All tables and join tables has had the word supervisor replaced with professor for consistency
+Action taken: Model and function have been changed to supervisor for consistency
 
 2. All of your Create and Update functions in your controllers need integrity checks. You mentioned to me that you're part way through writing error handling, so just treat this as a reminder. 
 
@@ -54,7 +54,7 @@ Action taken: Removed the ordered = True
 
 6. Student email has to be unique, professor email does not. This logic is inconsistent but potentially intentional so I figured I'd mention it. 
 
-Action taken: Changed the professors email so it is unique
+Action taken: Changed the supervisors email so it is unique (note professor was changed to supervisor)
 
 7. Typos in function names
 - get thesis function:  def get_theses():
@@ -63,5 +63,10 @@ Action taken: None theses is the plural for thesis and this function gets the en
 
 - delete student_supervisor: def delete_student(student_supervisor_id):
 
-Action taken: student_supervisor_id changed to student_professor_id for consistency
+Action taken: delete typo fixed
+
+Michael Asquith 6pm 19/12/2024 feedback
+Fix erd so that the api matches the erd
+
+Action taken: ERD fixed so that it matches the api
 

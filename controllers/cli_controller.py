@@ -115,6 +115,12 @@ def seed_tables():
             email="stacylark@pol.com",
             address_id=addresses[4].id,
         ),
+          Student(
+            name="Donald Mouse",
+            phone="0100000006",
+            email="donaldmouse@maze.com",
+            address_id=addresses[3].id,
+        ),
     ]
     db.session.add_all(students)
     db.session.commit()
@@ -130,19 +136,19 @@ def seed_tables():
             name="Hayley Blue",
             phone="0300000001",
             email="hayleyblue@university.com",
-            faculty_id=faculties[1].id,
+            faculty_id=faculties[2].id,
         ),
         Supervisor(
             name="Sonia Marie",
             phone="0300000002",
             email="soniamarie@university.com",
-            faculty_id=faculties[1].id,
+            faculty_id=faculties[2].id,
         ),
         Supervisor(
             name="Luke Sky",
             phone="0300000003",
             email="lukesky@university.com",
-            faculty_id=faculties[2].id,
+            faculty_id=faculties[0].id,
         ),
         Supervisor(
             name="Sebastien Park",
@@ -156,6 +162,12 @@ def seed_tables():
             email="bonnietree@university.com",
             faculty_id=faculties[4].id,
         ),
+         Supervisor(
+            name="Joel Lee",
+            phone="0300000006",
+            email="Joellee@university.com",
+            faculty_id=faculties[1].id,
+        )
     ]
     db.session.add_all(supervisors)
     db.session.commit()
@@ -209,11 +221,12 @@ def seed_tables():
     student_supervisor = [
         Student_supervisor(student_id=students[0].id, supervisor_id=supervisors[0].id),
         Student_supervisor(student_id=students[1].id, supervisor_id=supervisors[1].id),
-        Student_supervisor(student_id=students[1].id, supervisor_id=supervisors[2].id),
-        Student_supervisor(student_id=students[2].id, supervisor_id=supervisors[1].id),
-        Student_supervisor(student_id=students[3].id, supervisor_id=supervisors[2].id),
+        Student_supervisor(student_id=students[1].id, supervisor_id=supervisors[3].id),
+        Student_supervisor(student_id=students[2].id, supervisor_id=supervisors[5].id),
+        Student_supervisor(student_id=students[3].id, supervisor_id=supervisors[4].id),
         Student_supervisor(student_id=students[4].id, supervisor_id=supervisors[3].id),
-        Student_supervisor(student_id=students[4].id, supervisor_id=supervisors[4].id),
+        Student_supervisor(student_id=students[4].id, supervisor_id=supervisors[0].id),
+        Student_supervisor(student_id=students[5].id, supervisor_id=supervisors[6].id),
     ]
     db.session.add_all(student_supervisor)
     db.session.commit()
