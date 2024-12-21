@@ -4,26 +4,32 @@ from models.thesis import Thesis, Thesis_schema, Theses_schema
 from marshmallow import ValidationError
 
 thesis_bp = Blueprint("thesis", __name__, url_prefix="/thesis")
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError,DataError, ProgrammingError
 
 
 @thesis_bp.route("/")
 def get_theses():
-    stmt = db.select(Thesis)
-    theses_list = db.session.scalars(stmt)
-    data = Theses_schema.dump(theses_list)
-    return data
+    try:
+        stmt = db.select(Thesis)
+        theses_list = db.session.scalars(stmt)
+        data = Theses_schema.dump(theses_list)
+        return data
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 
 
 @thesis_bp.route("/<int:thesis_id>")
 def get_thesis(thesis_id):
-    stmt = db.select(Thesis).filter_by(id=thesis_id)
-    thesis = db.session.scalar(stmt)
-    if thesis:
-        data = Thesis_schema.dump(thesis)
-        return data
-    else:
-        return {"message": f"thesis with id {thesis_id} not found"}, 404
+    try:
+        stmt = db.select(Thesis).filter_by(id=thesis_id)
+        thesis = db.session.scalar(stmt)
+        if thesis:
+            data = Thesis_schema.dump(thesis)
+            return data
+        else:
+            return {"message": f"thesis with id {thesis_id} not found"}, 404
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 
 
 @thesis_bp.route("/", methods=["POST"])
@@ -41,6 +47,8 @@ def create_thesis():
         return {"message": f"student is already in the system or does not exist"}, 409
     except ValidationError as err:
         return {"message": "Invalid fields", "errors": err.messages}, 400
+    except DataError as err:
+        return {"message":"student_id or status_id must be entered"}, 400
 
 
 @thesis_bp.route("/<int:thesis_id>", methods=["PUT", "PATCH"])
@@ -61,16 +69,23 @@ def update_thesis(thesis_id):
             return {"message": f"thesis with id {thesis_id} does not exist"}, 404
     except IntegrityError:
         return {"message": "status_id or student_id does not exist"}, 409
+    except DataError as err:
+        return {"message":"postcode or street number must be entered"}, 400
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 
 
 @thesis_bp.route("/<int:thesis_id>", methods=["Delete"])
 def delete_thesis(thesis_id):
-    stmt = db.select(Thesis).filter_by(id=thesis_id)
-    thesis = db.session.scalar(stmt)
-    if thesis:
-        db.session.delete(thesis)
-        db.session.commit()
-        return {"messgage": f"thesis with id {thesis_id} deleted"}
-    else:
-        return {"message": f"thesis with {thesis_id} does not exist"}, 404
+    try:
+        stmt = db.select(Thesis).filter_by(id=thesis_id)
+        thesis = db.session.scalar(stmt)
+        if thesis:
+            db.session.delete(thesis)
+            db.session.commit()
+            return {"messgage": f"thesis with id {thesis_id} deleted"}
+        else:
+            return {"message": f"thesis with {thesis_id} does not exist"}, 404
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 

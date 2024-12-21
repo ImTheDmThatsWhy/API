@@ -1,12 +1,11 @@
 from flask import Blueprint, request
 from init import db
-import re
 from models.supervisor import (
     Supervisor,
     supervisor_schema,
     supervisors_schema,
 )
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError,DataError, ProgrammingError
 from psycopg2 import errorcodes
 from marshmallow import ValidationError
 
@@ -15,21 +14,27 @@ supervisors_bp = Blueprint("supervisors", __name__, url_prefix="/supervisors")
 
 @supervisors_bp.route("/")
 def get_supervisors():
-    stmt = db.select(Supervisor)
-    supervisors_list = db.session.scalars(stmt)
-    data = supervisors_schema.dump(supervisors_list)
-    return data
+    try:
+        stmt = db.select(Supervisor)
+        supervisors_list = db.session.scalars(stmt)
+        data = supervisors_schema.dump(supervisors_list)
+        return data
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 
 
 @supervisors_bp.route("/<int:supervisor_id>")
 def get_supervisor(supervisor_id):
-    stmt = db.select(Supervisor).filter_by(id=supervisor_id)
-    supervisor = db.session.scalar(stmt)
-    if supervisor:
-        data = supervisor_schema.dump(supervisor)
-        return data
-    else:
-        return {"message": f"supervisor with id {supervisor_id} does not exist"}, 404
+    try:
+        stmt = db.select(Supervisor).filter_by(id=supervisor_id)
+        supervisor = db.session.scalar(stmt)
+        if supervisor:
+            data = supervisor_schema.dump(supervisor)
+            return data
+        else:
+            return {"message": f"supervisor with id {supervisor_id} does not exist"}, 404
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 
 
 @supervisors_bp.route("/", methods=["POST"])
@@ -55,6 +60,9 @@ def create_supervisor():
             return {"messgae": "email address or phone number already in use"}, 409
     except ValidationError as err:
         return {"message": "Invalid fields", "errors": err.messages}, 400
+    except DataError as err:
+        return {"message":"faculty_id must be entered"}, 400
+   
 
 
 @supervisors_bp.route("/<int:supervisor_id>", methods=["PUT", "PATCH"])
@@ -80,6 +88,14 @@ def update_supervisor(supervisor_id):
         return {"message": "Email address or phone number already in use"}, 409
     except ValidationError as err:
         return {"message": "Invalid fields", "errors": err.messages}, 400
+    except DataError as err:
+        return {"message":"faculty_id must be entered"}, 400
+    except IntegrityError as err:
+        print(err.orig.pgcode)
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {"message": f"Field {err.orig.diag.column_name} required "}, 409
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
 
 
 @supervisors_bp.route("/<int:supervisor_id>", methods=["Delete"])
@@ -97,3 +113,5 @@ def delete_supervisor(supervisor_id):
         return {
             "message": f"supervisor with {supervisor_id} is linked to a student and cannot be deleted"
         }, 409
+    except ProgrammingError:
+        return {"message":"tables need to be seeded with data"},400
