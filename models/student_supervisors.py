@@ -13,17 +13,18 @@ class Student_supervisor(db.Model):
         db.Integer, db.ForeignKey("supervisors.id"), nullable=False
     )
 
-    # student = db.relationship("student", back_populates="student_supervisors")
-    # supervisor = db.relationship("supervisor", back_populates="student_supervisors")
+    student = db.relationship("Student", back_populates="student_supervisor")
+    supervisor = db.relationship("Supervisor", back_populates="student_supervisor")
 
 
 class Student_supervisorSchema(ma.Schema):
-    # student = fields.Nested("StudentSchema", only=["name", "email"])
-    # supervisor = fields.Nested("supervisorSchema", only=["name", "phone"])
 
-    supervisor = fields.Nested("supervisorSchema", only=["supervisors_id"])
-    student = fields.Nested("StudentSchema", only=["students_id"])
-
+    supervisor = fields.Nested("SupervisorSchema", only=["name", "phone", "faculty_id"])
+    student = fields.Nested("StudentSchema", only=["name", "email"])
+    
+    # supervisor = fields.Nested("SupervisorSchema", only=["supervisors_id"])
+    # student = fields.Nested("StudentSchema", only=["students_id"])
+    
     supervisor_id = fields.String(
         required=True,
         validate=And(

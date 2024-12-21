@@ -8,11 +8,13 @@ class Faculty(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     faculty_name = db.Column(db.String(300), nullable=False)
-    supervisor =db.relationship("Supervisor", back_populates="faculty_name")
+    supervisor = db.relationship("Supervisor", back_populates="faculty_name")
 
 
 class FacultySchema(ma.Schema):
-    supervisor= fields.List(fields.Nested("SupervisorSchema", exclude=["faculty_name"]))
+    supervisor = fields.List(
+        fields.Nested("SupervisorSchema", exclude=["faculty_name"])
+    )
     faculty_name = fields.String(
         required=True,
         validate=And(

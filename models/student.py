@@ -12,9 +12,10 @@ class Student(db.Model):
     email = db.Column(db.String(100), nullable=False, unique=True)
     phone = db.Column(db.VARCHAR(20), nullable=False, unique=True)
     address_id = db.Column(db.Integer, db.ForeignKey("addresses.id"), nullable=False)
-
+    student_supervisor=db.relationship("Student_supervisor", back_populates="student")
 
 class StudentSchema(ma.Schema):
+    student_supervisor=fields.List(fields.Nested("Student_supervisorSchema", exclude=["student"]))
     name = fields.String(
         required=True,
         validate=And(
@@ -45,7 +46,7 @@ class StudentSchema(ma.Schema):
     )
 
     class Meta:
-        fields = ("id", "name", "email", "phone", "address_id")
+        fields = ("id", "name", "email", "phone", "address_id", "student_supervisor")
 
 
 student_schema = StudentSchema()
