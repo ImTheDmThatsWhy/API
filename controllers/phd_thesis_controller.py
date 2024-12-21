@@ -4,7 +4,7 @@ from models.thesis import Thesis, Thesis_schema, Theses_schema
 from marshmallow import ValidationError
 
 thesis_bp = Blueprint("thesis", __name__, url_prefix="/thesis")
-from sqlalchemy.exc import IntegrityError,DataError, ProgrammingError
+from sqlalchemy.exc import IntegrityError, DataError, ProgrammingError
 
 
 @thesis_bp.route("/")
@@ -15,7 +15,7 @@ def get_theses():
         data = Theses_schema.dump(theses_list)
         return data
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @thesis_bp.route("/<int:thesis_id>")
@@ -29,7 +29,7 @@ def get_thesis(thesis_id):
         else:
             return {"message": f"thesis with id {thesis_id} not found"}, 404
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @thesis_bp.route("/", methods=["POST"])
@@ -39,7 +39,8 @@ def create_thesis():
         new_thesis = Thesis(
             name=body_data.get("name"),
             status_id=body_data.get("status_id"),
-            student_id=body_data.get("student_id"),)
+            student_id=body_data.get("student_id"),
+        )
         db.session.add(new_thesis)
         db.session.commit()
         return Thesis_schema.dump(new_thesis), 201
@@ -48,7 +49,7 @@ def create_thesis():
     except ValidationError as err:
         return {"message": "Invalid fields", "errors": err.messages}, 400
     except DataError as err:
-        return {"message":"student_id or status_id must be entered"}, 400
+        return {"message": "student_id or status_id must be entered"}, 400
 
 
 @thesis_bp.route("/<int:thesis_id>", methods=["PUT", "PATCH"])
@@ -60,9 +61,7 @@ def update_thesis(thesis_id):
         if thesis:
             thesis.name = body_data.get("name") or thesis.name
             thesis.student_id = body_data.get("student_id") or thesis.student_id
-            thesis.status_id = (
-                body_data.get("status_id") or thesis.status_id
-            )
+            thesis.status_id = body_data.get("status_id") or thesis.status_id
             db.session.commit()
             return Thesis_schema.dump(thesis)
         else:
@@ -70,9 +69,9 @@ def update_thesis(thesis_id):
     except IntegrityError:
         return {"message": "status_id or student_id does not exist"}, 409
     except DataError as err:
-        return {"message":"postcode or street number must be entered"}, 400
+        return {"message": "postcode or street number must be entered"}, 400
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @thesis_bp.route("/<int:thesis_id>", methods=["Delete"])
@@ -87,5 +86,4 @@ def delete_thesis(thesis_id):
         else:
             return {"message": f"thesis with {thesis_id} does not exist"}, 404
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
-
+        return {"message": "tables need to be seeded with data"}, 400

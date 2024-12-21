@@ -1,9 +1,10 @@
 from flask import Blueprint, request
 from init import db
 from models.address import Address, addresses_schema, address_schema
-from sqlalchemy.exc import IntegrityError, DataError,ProgrammingError
+from sqlalchemy.exc import IntegrityError, DataError, ProgrammingError
 from marshmallow import ValidationError
 from psycopg2 import errorcodes
+
 addresses_bp = Blueprint("addresses", __name__, url_prefix="/addresses")
 
 
@@ -15,7 +16,7 @@ def get_addresses():
         data = addresses_schema.dump(addresses_list)
         return data
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @addresses_bp.route("/<int:address_id>")
@@ -29,7 +30,7 @@ def get_address(address_id):
         else:
             return {"message": f"address with id{address_id} not found"}, 404
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @addresses_bp.route("/", methods=["POST"])
@@ -38,12 +39,12 @@ def create_address():
         body_data = request.get_json()
         stmt = db.select(Address)
         address = db.session.scalars(stmt)
-        postcode=body_data.get("postcode")
-        
-        if len(postcode.strip())<4:
-            return {"message":"postcode must be 4 numbers"}
-        if len(postcode.strip())>4:
-            return {"message":"postcode must be 4 numbers"}
+        postcode = body_data.get("postcode")
+
+        if len(postcode.strip()) < 4:
+            return {"message": "postcode must be 4 numbers"}
+        if len(postcode.strip()) > 4:
+            return {"message": "postcode must be 4 numbers"}
         new_address = Address(
             street_number=body_data.get("street_number"),
             street=body_data.get("street"),
@@ -66,7 +67,8 @@ def create_address():
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"message": f"Field {err.orig.diag.column_name} required "}, 409
     except DataError as err:
-        return {"message":"postcode or street number must be entered"}, 400
+        return {"message": "postcode or street number must be entered"}, 400
+
 
 @addresses_bp.route("/<int:address_id>", methods=["PUT", "PATCH"])
 def update_address(address_id):
@@ -75,7 +77,9 @@ def update_address(address_id):
         address = db.session.scalar(stmt)
         body_data = request.get_json()
         if address:
-            address.street_number = body_data.get("street_number") or address.street_number
+            address.street_number = (
+                body_data.get("street_number") or address.street_number
+            )
             address.street = body_data.get("street") or address.street
             address.suburb = body_data.get("suburb") or address.suburb
             address.postcode = body_data.get("postcode") or address.postcode
@@ -91,9 +95,9 @@ def update_address(address_id):
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"message": f"Field {err.orig.diag.column_name} required "}, 409
     except DataError as err:
-        return {"message":"postcode or street number must be entered"}, 400
+        return {"message": "postcode or street number must be entered"}, 400
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 # except IntegrityError:
@@ -116,4 +120,4 @@ def delete_address(address_id):
             "message": f"address with id {address_id} is linked to a student and cannot be deleted"
         }, 409
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400

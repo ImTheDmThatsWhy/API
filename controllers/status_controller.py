@@ -16,7 +16,7 @@ def get_statuses():
         data = statuses_schema.dump(status_list)
         return data
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @status_bp.route("/<int:status_id>")
@@ -30,14 +30,14 @@ def get_status(status_id):
         else:
             return {"message": f"status with id{status_id} not found"}, 404
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @status_bp.route("/", methods=["POST"])
 def create_status():
     try:
         body_data = request.get_json()
-        new_status = Status(status =body_data.get("status_name"))
+        new_status = Status(status=body_data.get("status_name"))
         db.session.add(new_status)
         db.session.commit()
         return status_schema.dump(new_status), 201
@@ -46,7 +46,7 @@ def create_status():
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"message": f"Field {err.orig.diag.column_name} required "}, 409
     except ValidationError as err:
-        return {"message": "Invalid fields", "errors": err.messages},400
+        return {"message": "Invalid fields", "errors": err.messages}, 400
 
 
 @status_bp.route("/<int:status_id>", methods=["PUT", "PATCH"])
@@ -56,7 +56,7 @@ def update_status(status_id):
         status = db.session.scalar(stmt)
         body_data = request.get_json()
         status = str(body_data.get("status_name"))
-        if len(status.strip()) ==0:
+        if len(status.strip()) == 0:
             return {"message": "status name cannot be empty"}, 400
         if status:
             status.status_name = body_data.get("status_name") or status.status_name
@@ -68,11 +68,9 @@ def update_status(status_id):
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             return {"message": err.orig.diag.message_detail}, 409
     except ValidationError as err:
-        return {"message": "Invalid fields", "errors": err.messages},400
+        return {"message": "Invalid fields", "errors": err.messages}, 400
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
-
-  
+        return {"message": "tables need to be seeded with data"}, 400
 
 
 @status_bp.route("/<int:status_id>", methods=["Delete"])
@@ -91,4 +89,4 @@ def delete_status(status_id):
             "message": f"status with {status_id} is linked to a thesis and cannot be deleted"
         }, 409
     except ProgrammingError:
-        return {"message":"tables need to be seeded with data"},400
+        return {"message": "tables need to be seeded with data"}, 400

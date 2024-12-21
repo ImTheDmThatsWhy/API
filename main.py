@@ -10,7 +10,9 @@ from controllers.status_controller import status_bp
 from controllers.phd_thesis_controller import thesis_bp
 from controllers.student_supervisors_controllers import student_supervisors_bp
 from dotenv import load_dotenv
+
 load_dotenv()
+
 
 def create_app():
     app = Flask(__name__)

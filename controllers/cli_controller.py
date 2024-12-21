@@ -115,7 +115,7 @@ def seed_tables():
             email="stacylark@pol.com",
             address_id=addresses[4].id,
         ),
-          Student(
+        Student(
             name="Donald Mouse",
             phone="0100000006",
             email="donaldmouse@maze.com",
@@ -162,12 +162,12 @@ def seed_tables():
             email="bonnietree@university.com",
             faculty_id=faculties[4].id,
         ),
-         Supervisor(
+        Supervisor(
             name="Joel Lee",
             phone="0300000006",
             email="Joellee@university.com",
             faculty_id=faculties[1].id,
-        )
+        ),
     ]
     db.session.add_all(supervisors)
     db.session.commit()
