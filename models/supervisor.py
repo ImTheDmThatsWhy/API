@@ -11,9 +11,12 @@ class Supervisor(db.Model):
     phone = db.Column(db.VARCHAR(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     faculty_id = db.Column(db.Integer, db.ForeignKey("faculties.id"), nullable=False)
+    faculty_name= db.relationship("Faculty", back_populates="supervisor")
 
 
 class SupervisorSchema(ma.Schema):
+    
+    faculty_name=fields.Nested("FacultySchema", only=["faculty_name"])
     name = fields.String(
         required=True,
         validate=And(
@@ -42,11 +45,9 @@ class SupervisorSchema(ma.Schema):
             Regexp("^[0-9]+$", error="Only numbers"),
         ),
     )
-    ordered = True
-    faculty = fields.Nested("FacultySchema", only=["faculty_id"])
-
+    
     class Meta:
-        fields = ["id", "name", "phone", "email", "faculty_id"]
+        fields = ["id", "name", "phone", "email", "faculty_id", "faculty_name"]
 
 
 supervisor_schema = SupervisorSchema()
