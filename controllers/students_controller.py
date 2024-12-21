@@ -32,20 +32,10 @@ def get_student(student_id):
 def create_student():
     try:
         body_data = student_schema.load(request.get_json())
-        # while True:
-        phone=body_data.get("phone")
-            # combo_phone= re.search("^[1-9()])*$", phone)
-        if len(phone.strip())<8:
-            return{"message":"phone number must have at least 8 numbers"}
-        # if combo_phone:
-        #     print("phone number accepted")
-        #     break
-        # else:
-        #     print("phone number incorrect only numbers and brackets accepted")
 
         new_student = Student(
             name=body_data.get("name"),
-            phone=phone,
+            phone=body_data.get("phone"),
             email=body_data.get("email"),
             address_id=body_data.get("address_id"),
         )
@@ -69,10 +59,7 @@ def update_student(student_id):
         stmt = db.select(Student).filter_by(id=student_id)
         student = db.session.scalar(stmt)
         body_data = request.get_json()
-        phone=body_data.get("phone")
-        if len(phone.strip())<8:
-            return{"message":"phone number must have at least 8 numbers"}
-
+        
         if student:
             student.name = body_data.get("name") or student.name
             student.phone = body_data.get("phone") or student.phone

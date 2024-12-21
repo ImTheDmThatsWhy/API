@@ -19,6 +19,10 @@ class StudentSchema(ma.Schema):
         Length(min=1, error="Name must be at least 1 characters long"),
         Regexp('^[A-Za-z][A-Za-z]*$', error="Only letters, and spaces are allowed")
     ))
+    phone = fields.String(required=True, validate=And(
+        Length(max=20, error="Too long"),
+        Regexp('^[0-9]+$', error="Only numbers")
+    ))
     email = fields.String(required=True, validate=
     Regexp(r"^[a-zA-Z0-9_-]+@[a-zA-Z0-9-]+.[a-zA-Z]+$", error="email format incorrect"))
   

@@ -35,13 +35,11 @@ def get_supervisor(supervisor_id):
 @supervisors_bp.route("/", methods=["POST"])
 def create_supervisor():
     try:
-        body_data = request.get_json()
-        phone = (body_data.get("phone"))
-        if len(phone.strip()) <8:
-            return {"message": "phone number must have at least 8 numbers"}, 400
+        body_data = supervisor_schema.load(request.get_json())
+
         new_supervisor = Supervisor(
             name=body_data.get("name"),
-            phone=phone,
+            phone=body_data.get("phone"),
             email=body_data.get("email"),
             faculty_id=body_data.get("faculty_id"),
         )
@@ -65,10 +63,7 @@ def update_supervisor(supervisor_id):
         stmt = db.select(Supervisor).filter_by(id=supervisor_id)
         supervisor = db.session.scalar(stmt)
         body_data = request.get_json()
-        phone=body_data.get("phone")
-        if len(phone.strip())<8:
-             return{"message":"phone number must have at least 8 numbers"}
-
+    
         if supervisor:
             supervisor.name = body_data.get("name") or supervisor.name
             supervisor.phone = body_data.get("phone") or supervisor.phone
