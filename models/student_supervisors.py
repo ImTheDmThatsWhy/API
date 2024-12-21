@@ -1,6 +1,6 @@
 # from marshmallow import fields
 from init import db, ma
-from Marshmallow import fields
+from marshmallow import fields
 from marshmallow.validate import Length, And, Regexp
 
 
